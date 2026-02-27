@@ -22,6 +22,6 @@ app.use('/admin',adminRoutes)
  let seed= require('./adminlogin/seed')
  seed.seedadmin()
 
-app.listen(3000,function(){
+app.listen(5000,function(){
     console.log("Server Start at 3001")
 })
