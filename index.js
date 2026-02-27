@@ -1,37 +1,32 @@
-const express = require('express');
-var cors = require('cors');
+const express = require('express')
+var cors = require('cors')
+const path = require("path");
 
-const app = express();
-const db = require('./config/db');
-const mongoose = require('mongoose');
+const app = express()
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json({ limit: '50mb' }));
-app.use(express.static(__dirname + '/public'));
-app.use(cors());
-app.use(express.json());
+const db =require('./config/db')
 
-// routes
-const adminRoutes = require('./routes/adminRoutes');
-app.use('/admin', adminRoutes);
+app.use(express.urlencoded({extended:false}));
+app.use(express.json({limit:'50mb'}));
+app.use(cors())
 
-const studentRoutes = require('./routes/studentRoutes');
-app.use('/student', studentRoutes);
+// API routes
+const adminRoutes=require('./routes/adminRoutes')
+app.use('/admin',adminRoutes)
 
-// seed admin
-let seed = require('./adminlogin/seed');
-seed.seedadmin();
+const studentRoutes=require('./routes/studentRoutes')
+app.use('/student',studentRoutes)
 
+// React build serve
+app.use(express.static(path.join(__dirname, "build")));
 
-// ✅ health check route (IMPORTANT)
-app.get("/", (req, res) => {
-    res.send("EnggHub API running successfully 🚀");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "build", "index.html"));
 });
 
+let seed= require('./adminlogin/seed')
+seed.seedadmin()
 
-// ✅ proper port handling (Docker + EC2 compatible)
-const PORT = process.env.PORT || 3000;
-
-app.listen(PORT, function () {
-    console.log(`Server Start at ${PORT}`);
-});
+app.listen(3000,()=>{
+    console.log("Server Start at 3000")
+})
