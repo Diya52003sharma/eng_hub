@@ -1,27 +1,32 @@
 const express = require('express')
 var cors = require('cors')
+const path = require("path");
+
 const app = express()
-const db =require('./config/db')
-const mongoose=require('mongoose')
-app.use(express.urlencoded({extended:false}));
-app.use(express.json({limit:'50mb'}));
-app.use(express.static(__dirname+'/public'))
+
+const db = require('./config/db')
+const mongoose = require('mongoose')
+
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json({ limit: '50mb' }));
 app.use(cors())
-app.use(express.json())
-//const courseRoutes=require('./routes/courseRoutes.js')
-//app.use('/course',courseRoutes)
 
-//const teacherRoutes=require('./routes/teacherRoutes')
-//app.use('/teacher',teacherRoutes)
-const adminRoutes=require('./routes/adminRoutes')
-app.use('/admin',adminRoutes)
+const adminRoutes = require('./routes/adminRoutes')
+app.use('/admin', adminRoutes)
 
- const studentRoutes=require('./routes/studentRoutes')
- app.use('/student',studentRoutes)
+const studentRoutes = require('./routes/studentRoutes')
+app.use('/student', studentRoutes)
 
- let seed= require('./adminlogin/seed')
- seed.seedadmin()
+// React build serve
+app.use(express.static(path.join(__dirname, "build")));
 
-app.listen(3001,function(){
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "build", "index.html"));
+});
+
+let seed = require('./adminlogin/seed')
+seed.seedadmin()
+
+app.listen(3001, function () {
     console.log("Server Start at 3001")
 })
