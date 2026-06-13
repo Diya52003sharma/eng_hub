@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-mongoose.connect("mongodb://127.0.0.1:27017/quick_space")
+mongoose.connect("mongodb+srv://sdiya0523_db_user:512@cluster0.rkjdr59.mongodb.net/?appName=Cluster0")
     .then(connect => {
         console.log("DB Connected")
     })
